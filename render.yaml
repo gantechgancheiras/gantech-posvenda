@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: gantech-posvenda
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2
+    envVars:
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gantech-posvenda-db
+          property: connectionString
+      - key: COOKIE_SECURE
+        value: 'true'
+      - key: ML_CLIENT_ID
+        sync: false
+      - key: ML_CLIENT_SECRET
+        sync: false
+      - key: ML_REDIRECT_URI
+        sync: false
+databases:
+  - name: gantech-posvenda-db
+    databaseName: posvenda
+    user: posvenda
